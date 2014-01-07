@@ -5,7 +5,7 @@ package craft;
  */
 public strictfp abstract class Unit {
     private int health;
-    private  float x;
+    private float x;
     private float y;
 
     public float getX() {
