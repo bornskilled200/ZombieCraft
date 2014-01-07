@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import craft.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by David Park on 1/7/14.
@@ -31,7 +30,7 @@ public class Menu implements Screen {
             ArrayList<Player> players = new ArrayList<Player>();
             players.add(new ComputerPlayer(Race.ZOMBIE));
             players.add(new HumanPlayer(Race.HUMAN));
-            zombieCraft.setScreen(new Map(this, zombieCraft, players));
+            zombieCraft.setScreen(new GameMap(spriteBatch, bitmapFont, this, zombieCraft, players));
         }
     }
 

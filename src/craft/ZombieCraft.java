@@ -16,6 +16,13 @@ public class ZombieCraft extends Game {
     private BitmapFont bitmapFont;
 
     @Override
+    public void dispose() {
+        super.dispose();
+        spriteBatch.dispose();
+        bitmapFont.dispose();
+    }
+
+    @Override
     public void create() {
         spriteBatch = new SpriteBatch();
         bitmapFont = new BitmapFont();
@@ -26,6 +33,6 @@ public class ZombieCraft extends Game {
     }
 
     public static void main(String[] args) {
-        new LwjglApplication(new ZombieCraft());
+        new LwjglApplication(new ZombieCraft(), "ZombieCraft", 1280, 720, true);
     }
 }
