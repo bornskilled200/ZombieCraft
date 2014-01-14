@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import craft.MainBuilding;
 import craft.Player;
 import craft.Unit;
 import craft.ZombieCraft;
@@ -61,22 +62,28 @@ public class GameMap implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 0);
     }
 
+    public float accumalator;
+    private final float TICKS_PER_SECOND = 25;
+    private final float SKIP_TICKS = 1000 / TICKS_PER_SECOND;
+    private final int MAX_FRAME_SKIP = 5;
 
     @Override
     public void render(float delta) {
-        for (Unit unit : units) {
-            unit.act();
+        accumalator += delta;
+
+        int loops = 0;
+        while (accumalator > SKIP_TICKS && loops < MAX_FRAME_SKIP) {
+            update_game();
+
+            accumalator -= SKIP_TICKS;
+            loops++;
         }
 
-        for (int i = mainBuildings.size() - 1; i >= 0; i--) {
-            Unit base = mainBuildings.get(i);
-            if (!base.isDead()) continue;
+        float interpolation = accumalator / SKIP_TICKS;
+        display_game(interpolation);
+    }
 
-            mainBuildings.remove(i);
-            if (mainBuildings.size() == 1) {
-                zombieCraft.setScreen(menu);
-            }
-        }
+    private void display_game(float interpolation) {
 
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -85,6 +92,23 @@ public class GameMap implements Screen {
             spriteBatch.draw(textures.get(unit.getClass()), unit.getX(), unit.getY());
         }
         spriteBatch.end();
+    }
+
+    private void update_game() {
+        for (Unit unit : units) {
+            unit.act();
+        }
+
+        for (int i = units.size() - 1; i >= 0; i--) {
+            Unit unit = units.get(i);
+
+            if (!unit.isDead()) continue;
+
+            units.remove(i);
+            if (unit instanceof MainBuilding && mainBuildings.remove(unit) && mainBuildings.size() == 1) {
+                zombieCraft.setScreen(menu);
+            }
+        }
     }
 
     @Override

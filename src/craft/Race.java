@@ -11,12 +11,12 @@ import java.util.List;
 public enum Race {
     ZOMBIE {
         @Override
-        public Unit getMainBuilding() {
+        public MainBuilding getMainBuilding() {
             return new Brain();
         }
 
         @Override
-        public List<Unit> getBuildableUnits() {
+        public List<Unit> getAllUnits() {
             return null;
         }
 
@@ -26,12 +26,12 @@ public enum Race {
         }
     }, HUMAN {
         @Override
-        public Unit getMainBuilding() {
+        public MainBuilding getMainBuilding() {
             return new Base();
         }
 
         @Override
-        public List<Unit> getBuildableUnits() {
+        public List<Unit> getAllUnits() {
             return null;
         }
 
@@ -41,9 +41,9 @@ public enum Race {
         }
     };
 
-    public abstract Unit getMainBuilding();
+    public abstract MainBuilding getMainBuilding();
 
-    public abstract List<Unit> getBuildableUnits();
+    public abstract List<Unit> getAllUnits();
 
     public abstract List<Trait> getStartingTraits();
 }
