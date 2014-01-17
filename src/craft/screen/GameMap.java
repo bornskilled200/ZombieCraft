@@ -13,7 +13,6 @@ import craft.Unit;
 import craft.ZombieCraft;
 import craft.human.Base;
 import craft.zombie.Brain;
-import sun.net.www.content.text.plain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +25,6 @@ import java.util.Map;
 public class GameMap implements Screen {
     private final SpriteBatch spriteBatch;
     private final BitmapFont bitmapFont;
-    private Menu menu;
     private ZombieCraft zombieCraft;
     private final List<Player> players;
     private List<Unit> mainBuildings;
@@ -36,10 +34,9 @@ public class GameMap implements Screen {
     private OrthographicCamera camera;
 
 
-    public GameMap(SpriteBatch spriteBatch, BitmapFont bitmapFont, Menu menu, ZombieCraft zombieCraft, List<Player> players) {
-        this.spriteBatch = spriteBatch;
-        this.bitmapFont = bitmapFont;
-        this.menu = menu;
+    public GameMap(ZombieCraft zombieCraft, List<Player> players) {
+        this.spriteBatch = zombieCraft.getSpriteBatch();
+        this.bitmapFont = zombieCraft.getBitmapFont();
         this.zombieCraft = zombieCraft;
         this.players = players;
 
@@ -66,6 +63,7 @@ public class GameMap implements Screen {
     private final float TICKS_PER_SECOND = 25;
     private final float SKIP_TICKS = 1000 / TICKS_PER_SECOND;
     private final int MAX_FRAME_SKIP = 5;
+    private int time;
 
     @Override
     public void render(float delta) {
@@ -73,9 +71,10 @@ public class GameMap implements Screen {
 
         int loops = 0;
         while (accumalator > SKIP_TICKS && loops < MAX_FRAME_SKIP) {
-            update_game();
+            update_game(time);
 
             accumalator -= SKIP_TICKS;
+            time++;
             loops++;
         }
 
@@ -94,9 +93,9 @@ public class GameMap implements Screen {
         spriteBatch.end();
     }
 
-    private void update_game() {
+    private void update_game(int time) {
         for (Unit unit : units) {
-            unit.act();
+            unit.act(time);
         }
 
         for (int i = units.size() - 1; i >= 0; i--) {
@@ -106,7 +105,7 @@ public class GameMap implements Screen {
 
             units.remove(i);
             if (unit instanceof MainBuilding && mainBuildings.remove(unit) && mainBuildings.size() == 1) {
-                zombieCraft.setScreen(menu);
+                zombieCraft.setScreen(zombieCraft.getMenu());
             }
         }
     }

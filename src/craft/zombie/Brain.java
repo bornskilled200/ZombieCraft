@@ -20,7 +20,7 @@ public class Brain extends MainBuilding {
     }
 
     @Override
-    public void act() {
+    public void act(int time) {
 
     }
 }

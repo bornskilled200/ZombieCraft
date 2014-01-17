@@ -15,9 +15,14 @@ public class ZombieCraft extends Game {
     private SpriteBatch spriteBatch;
     private BitmapFont bitmapFont;
 
+    public Screen getMenu() {
+        return menu;
+    }
+
     @Override
     public void dispose() {
         super.dispose();
+
         spriteBatch.dispose();
         bitmapFont.dispose();
     }
@@ -27,12 +32,20 @@ public class ZombieCraft extends Game {
         spriteBatch = new SpriteBatch();
         bitmapFont = new BitmapFont();
 
-        menu = new Menu(spriteBatch, bitmapFont, this);
+        menu = new Menu(this);
 
         setScreen(menu);
     }
 
     public static void main(String[] args) {
         new LwjglApplication(new ZombieCraft(), "ZombieCraft", 1280, 720, true);
+    }
+
+    public SpriteBatch getSpriteBatch() {
+        return spriteBatch;
+    }
+
+    public BitmapFont getBitmapFont() {
+        return bitmapFont;
     }
 }

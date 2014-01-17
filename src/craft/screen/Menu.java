@@ -17,20 +17,19 @@ public class Menu implements Screen {
     private final BitmapFont bitmapFont;
     private ZombieCraft zombieCraft;
 
-    public Menu(SpriteBatch spriteBatch, BitmapFont bitmapFont, ZombieCraft zombieCraft) {
-        this.spriteBatch = spriteBatch;
-        this.bitmapFont = bitmapFont;
+    public Menu(ZombieCraft zombieCraft) {
+        this.spriteBatch = zombieCraft.getSpriteBatch();
+        this.bitmapFont = zombieCraft.getBitmapFont();
         this.zombieCraft = zombieCraft;
     }
 
     @Override
     public void render(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1))
-        {
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
             ArrayList<Player> players = new ArrayList<Player>();
             players.add(new ComputerPlayer(Race.ZOMBIE));
             players.add(new HumanPlayer(Race.HUMAN));
-            zombieCraft.setScreen(new GameMap(spriteBatch, bitmapFont, this, zombieCraft, players));
+            zombieCraft.setScreen(new GameMap(zombieCraft, players));
         }
     }
 

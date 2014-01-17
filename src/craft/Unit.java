@@ -43,5 +43,5 @@ public strictfp abstract class Unit {
         return getHealth()<=0;
     }
 
-    public abstract void act();
+    public abstract void act(int time);
 }
