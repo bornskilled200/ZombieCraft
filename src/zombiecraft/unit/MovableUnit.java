@@ -1,5 +1,7 @@
-package craft;
+package zombiecraft.unit;
 
+
+import zombiecraft.Unit;
 
 /**
  * Created by David Park on 1/10/14.
@@ -10,6 +12,10 @@ public abstract class MovableUnit extends Unit {
     private float dx;
     private float dy;
     private int time;
+
+    public MovableUnit(String name) {
+        super(name);
+    }
 
     @Override
     public void act(int time) {

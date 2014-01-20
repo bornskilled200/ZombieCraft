@@ -1,4 +1,7 @@
-package craft;
+package zombiecraft.unit;
+
+import zombiecraft.Unit;
+import zombiecraft.UnitData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +13,14 @@ public abstract class MainBuilding extends Unit {
 
     private List<Unit> units;
 
-    protected MainBuilding() {
+    public MainBuilding(String name) {
+        super(name);
         this.units = new ArrayList<Unit>();
-        ;
     }
 
     public List<Unit> enteredUnits() {
         return units;
     }
 
-    public abstract List<Unit> buildableUnits();
+    public abstract List<UnitData> buildableUnits();
 }

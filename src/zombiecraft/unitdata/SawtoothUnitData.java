@@ -1,5 +1,8 @@
-package craft;
+package zombiecraft.unitdata;
 
+
+import zombiecraft.Unit;
+import zombiecraft.UnitData;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,21 +13,21 @@ package craft;
  */
 public class SawtoothUnitData extends UnitData {
     private final float triangleLength;
-    private final int velocity;
+    private final float velocity;
 
-    protected SawtoothUnitData(int health, String name, String description, float triangleLength, int velocity) {
+    protected SawtoothUnitData(int health, String name, String description, float triangleLength, float velocity) {
         super(health, name, description);
         this.triangleLength = triangleLength;
         this.velocity = velocity;
     }
 
     @Override
-    public float getDirection(int time) {
+    public float getDirection(int time, Unit unit) {
         return time % triangleLength == 0 ? 90 : -90;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public float getVelocity(int time) {
+    public float getVelocity(int time, Unit unit) {
         return velocity;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

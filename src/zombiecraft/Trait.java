@@ -1,4 +1,4 @@
-package craft;
+package zombiecraft;
 
 /**
  * Created by David Park on 1/7/14.

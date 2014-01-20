@@ -1,11 +1,13 @@
-package craft.screen;
+package zombiecraft.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import craft.*;
+import zombiecraft.*;
+import zombiecraft.player.ComputerPlayer;
+import zombiecraft.player.HumanPlayer;
 
 import java.util.ArrayList;
 
@@ -27,7 +29,7 @@ public class Menu implements Screen {
     public void render(float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
             ArrayList<Player> players = new ArrayList<Player>();
-            players.add(new ComputerPlayer(Race.ZOMBIE));
+            players.add(new ComputerPlayer(Race.HUMAN));
             players.add(new HumanPlayer(Race.HUMAN));
             zombieCraft.setScreen(new GameMap(zombieCraft, players));
         }

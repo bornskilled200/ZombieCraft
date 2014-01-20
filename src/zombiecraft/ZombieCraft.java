@@ -1,11 +1,11 @@
-package craft;
+package zombiecraft;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import craft.screen.Menu;
+import zombiecraft.screen.Menu;
 
 /**
  * Created by David Park on 1/7/14.

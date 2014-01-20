@@ -1,4 +1,4 @@
-package craft;
+package zombiecraft;
 
 
 /**
@@ -32,7 +32,7 @@ public abstract class UnitData {
         return description;
     }
 
-    public abstract float getDirection(int time);
+    public abstract float getDirection(int time, Unit unit);
 
-    public abstract float getVelocity(int time);
+    public abstract float getVelocity(int time, Unit unit);
 }
