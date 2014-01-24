@@ -12,25 +12,38 @@ import zombiecraft.UnitData;
  */
 public class GenericMovableUnit extends MovableUnit {
     private UnitData unitData;
+    private int currenttime;
+    private float generalDirection;
+    private float generalVelocity;
+
+    public UnitData getUnitData() {
+        return unitData;
+    }
 
     @Override
+
     public void act(int time) {
+        currenttime = time - getTime();
+
+        super.setVelocity(generalVelocity += unitData.getVelocity(currenttime, this));
+        super.setDirection(generalDirection += unitData.getDirection(currenttime, this));
+
         super.act(time);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void setVelocity(float velocity) {
+        generalVelocity = velocity;
+    }
+
+    @Override
+    public void setDirection(float direction) {
+        generalDirection = direction;
     }
 
     public GenericMovableUnit(UnitData unitData) {
         super(unitData.getName());
         this.unitData = unitData;
         setHealth(unitData.getHealth());
-    }
-
-    @Override
-    public float getDirection(int time) {
-        return unitData.getDirection(time, this);  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public float getVelocity(int time) {
-        return unitData.getVelocity(time, this);  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

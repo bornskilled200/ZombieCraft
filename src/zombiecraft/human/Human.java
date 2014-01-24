@@ -11,6 +11,6 @@ public class Human extends SawtoothUnitData {
     public static final String NAME = "Human";
 
     public Human() {
-        super(100, NAME, DESCRIPTION, 15, .2f);
+        super(100, NAME, DESCRIPTION, 20, 6f);
     }
 }

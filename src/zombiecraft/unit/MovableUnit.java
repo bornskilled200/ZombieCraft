@@ -1,6 +1,8 @@
 package zombiecraft.unit;
 
 
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import zombiecraft.Unit;
 
 /**
@@ -11,6 +13,8 @@ public abstract class MovableUnit extends Unit {
     private float previousY;
     private float dx;
     private float dy;
+    private float direction;
+    private float velocity;
     private int time;
 
     public MovableUnit(String name) {
@@ -22,24 +26,50 @@ public abstract class MovableUnit extends Unit {
         previousX = getX();
         previousY = getY();
 
-        float velocity = getVelocity(time - this.time);
-        if (velocity == 0)
-            dx = dy = 0;
-        else {
-            float direction = getDirection(time - this.time);
-            //if (direction!=0), optimization?
-
-            dx = (float) (StrictMath.cos(direction)) * direction * velocity;
-            dy = (float) (StrictMath.sin(direction)) * direction * velocity;
-        }
-
         setX(getX() + dx);
         setY(getY() + dy);
     }
 
-    public abstract float getDirection(int time);
+    public void setVelocity(float dx, float dy) {
+        this.dx = dx;
+        this.dy = dy;
+        float angle = (float) Math.atan2(new Vector2(dx, dy).y, new Vector2(dx, dy).x) * MathUtils.radiansToDegrees;
+        if (angle < 0) angle += 360;
+        direction = angle;
+        velocity = (float) Math.sqrt(new Vector2(dx, dy).x * new Vector2(dx, dy).x + new Vector2(dx, dy).y * new Vector2(dx, dy).y);
+    }
 
-    public abstract float getVelocity(int time);
+    public void setDirection(float direction) {
+        this.direction = direction;
+        dx = MathUtils.cosDeg(direction) * velocity;
+        dy = MathUtils.sinDeg(direction) * velocity;
+    }
+
+    public void setVelocity(float velocity) {
+        this.velocity = velocity;
+        dx = MathUtils.cosDeg(direction) * velocity;
+        dy = MathUtils.sinDeg(direction) * velocity;
+    }
+
+    public float getVelocity() {
+        return velocity;
+    }
+
+    public float getDirection() {
+        return direction;
+    }
+
+    public float getVelocityY() {
+        return dy;
+    }
+
+    public float getVelocityX() {
+        return dx;
+    }
+
+    public int getTime() {
+        return time;
+    }
 
     public void setTime(int time) {
         this.time = time;

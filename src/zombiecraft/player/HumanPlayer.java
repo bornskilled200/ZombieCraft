@@ -17,16 +17,23 @@ public class HumanPlayer extends Player {
         super(race);
     }
 
+    private int nextButton = Input.Buttons.LEFT;
+
     public void poll(GameMap gameMap, MainBuilding mainBuilding) {
-        if (Gdx.input.justTouched() && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            GenericMovableUnit genericMovableUnit = new GenericMovableUnit(race.getAllUnits().get(0));
-            float x = mainBuilding.getX();
-            float y = mainBuilding.getY();
-            int mouseX = Gdx.input.getX();
-            int mouseY = Gdx.input.getY();
-            //new Vector2(mouseX-x,mouseY-y).angle();
-            genericMovableUnit.setPosition(x, y);
-            gameMap.addUnit(this, genericMovableUnit);
+        if (!Gdx.input.isButtonPressed(nextButton)) {
+            return;
         }
+        nextButton = (nextButton + 1) % 2;
+        GenericMovableUnit genericMovableUnit = new GenericMovableUnit(race.getAllUnits().get(0));
+        float x = mainBuilding.getX();
+        float y = mainBuilding.getY();
+        int mouseX = Gdx.input.getX();
+        int mouseY = Gdx.input.getY();
+        float angle = new Vector2(mouseX - x, mouseY - y).angle();
+        genericMovableUnit.setDirection(angle);
+        System.out.println(genericMovableUnit.getDirection());
+        System.out.println(angle);
+        genericMovableUnit.setPosition(x, y);
+        gameMap.addUnit(this, genericMovableUnit);
     }
 }
