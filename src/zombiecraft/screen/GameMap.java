@@ -2,6 +2,7 @@ package zombiecraft.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -28,14 +29,16 @@ import java.util.Map;
 public class GameMap implements Screen {
     private final SpriteBatch spriteBatch;
     private final BitmapFont bitmapFont;
+    private OrthographicCamera camera;
+
+    private Map<String, Texture> textures;
+
     private ZombieCraft zombieCraft;
     private List<Player> players;
     private Map<Player, MainBuilding> mainBuildingMap;
     private List<Unit> mainBuildings;
     private List<Unit> units;
     private Map<Unit, Player> playerMap;
-    private Map<String, Texture> textures;
-    private OrthographicCamera camera;
 
 
     public GameMap(ZombieCraft zombieCraft, List<Player> players) {
@@ -73,6 +76,7 @@ public class GameMap implements Screen {
     private int time;
 
 
+    FPSLogger fpsLogger = new FPSLogger();
     @Override
     public void render(float delta) {
         accumalator += delta;
@@ -88,6 +92,7 @@ public class GameMap implements Screen {
 
         float interpolation = accumalator / SECONDS_PER_UPDATE;
         display_game(interpolation);
+        fpsLogger.log();
     }
 
     public void addUnit(Player player, Unit unit) {
@@ -113,18 +118,21 @@ public class GameMap implements Screen {
             float x = unit.getX();
             float y = unit.getY();
             if (unit instanceof MovableUnit) {
-//                System.out.println("x = " + x);
-//                System.out.println("y = " + y);
                 MovableUnit movableUnit = (MovableUnit) unit;
-                float previousX = movableUnit.getPreviousX();
-                float previousY = movableUnit.getPreviousY();
-//                System.out.println("previousX = " + previousX);
-//                System.out.println("previousY = " + previousY);
-                x = Interpolation.linear.apply(previousX, x, interpolation);//previousX + (x- previousX)*interpolation;
-                y = Interpolation.linear.apply(previousY, y, interpolation);//previousY + (y- previousY)*interpolation;
-//                System.out.println("interpolatedX = " + x);
-//                System.out.println("interpolatedY = " + y);
-//                System.out.println();
+                x = Interpolation.linear.apply(movableUnit.getPreviousX(), x, interpolation);//previousX + (x- previousX)*interpolation;
+                y = Interpolation.linear.apply(movableUnit.getPreviousY(), y, interpolation);//previousY + (y- previousY)*interpolation;
+                float velocityX = movableUnit.getVelocityX();
+                float velocityY = movableUnit.getVelocityY();
+                if (velocityX !=0 && velocityY !=0)
+                {
+                    float max = Math.min(x / (-velocityX), y / (-velocityY));
+                    float ghostX = x - (max * -velocityX);
+                    float ghostY = y - (max * -velocityY);
+                    spriteBatch.setColor(1,1,1,.5f);
+                    spriteBatch.draw(textures.get(unit.getName()),ghostX,ghostY);
+
+                    spriteBatch.setColor(1,1,1,1);
+                }
             }
             spriteBatch.draw(textures.get(unit.getName()), x, y);
         }

@@ -22,14 +22,14 @@ public class SawtoothUnitData extends UnitData {
     }
 
     @Override
-    public float getDirection(int time, Unit unit) {
+    public float addDirection(int time, Unit unit) {
         if (time == 0)
             return 45;
         return time % triangleLength == 0 ? (time / triangleLength % 2 == 0 ? 90 : -90) : 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public float getVelocity(int time, Unit unit) {
+    public float addVelocity(int time, Unit unit) {
         return time == 0 ? velocity : 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

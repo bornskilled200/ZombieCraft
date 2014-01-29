@@ -3,6 +3,7 @@ package zombiecraft;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import zombiecraft.screen.Menu;
@@ -38,7 +39,12 @@ public class ZombieCraft extends Game {
     }
 
     public static void main(String[] args) {
-        new LwjglApplication(new ZombieCraft(), "ZombieCraft", 1280, 720, true);
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.vSyncEnabled = false; // Setting to false disables vertical sync
+        config.foregroundFPS = 50; // Setting to 0 disables foreground fps throttling
+        config.backgroundFPS = 25; // Setting to 0 disables background fps throttling
+        config.title = "ZombieCraft";
+        new LwjglApplication(new ZombieCraft(), config);
     }
 
     public SpriteBatch getSpriteBatch() {
