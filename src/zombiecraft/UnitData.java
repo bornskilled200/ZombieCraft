@@ -32,7 +32,7 @@ public abstract class UnitData {
         return description;
     }
 
-    public abstract float addDirection(int time, Unit unit);
+    public abstract float offsetDirection(int time, Unit unit);
 
-    public abstract float addVelocity(int time, Unit unit);
+    public abstract float offsetVelocity(int time, Unit unit);
 }

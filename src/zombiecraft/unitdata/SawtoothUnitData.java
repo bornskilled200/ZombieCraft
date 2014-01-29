@@ -12,24 +12,24 @@ import zombiecraft.UnitData;
  * To change this template use File | Settings | File Templates.
  */
 public class SawtoothUnitData extends UnitData {
-    private final float triangleLength;
-    private final float velocity;
+    private final int triangleLength;
+    private int velocity;
 
-    protected SawtoothUnitData(int health, String name, String description, float triangleLength, float velocity) {
+    protected SawtoothUnitData(int health, String name, String description, int triangleLength, int velocity) {
         super(health, name, description);
         this.triangleLength = triangleLength;
         this.velocity = velocity;
     }
 
     @Override
-    public float addDirection(int time, Unit unit) {
-        if (time == 0)
-            return 45;
-        return time % triangleLength == 0 ? (time / triangleLength % 2 == 0 ? 90 : -90) : 0;  //To change body of implemented methods use File | Settings | File Templates.
+    public float offsetDirection(int time, Unit unit) {
+        if (time < triangleLength)
+            return 0;
+        return (time / triangleLength) % 2 == 0 ? 45 : -45;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public float addVelocity(int time, Unit unit) {
-        return time == 0 ? velocity : 0;  //To change body of implemented methods use File | Settings | File Templates.
+    public float offsetVelocity(int time, Unit unit) {
+        return velocity;
     }
 }

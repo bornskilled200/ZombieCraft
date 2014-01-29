@@ -25,8 +25,8 @@ public class GenericMovableUnit extends MovableUnit {
     public void act(int time) {
         currenttime = time - getTime();
 
-        super.setVelocity(generalVelocity += unitData.addVelocity(currenttime, this));
-        super.setDirection(generalDirection += unitData.addDirection(currenttime, this));
+        super.setVelocity(generalVelocity  + unitData.offsetVelocity(currenttime, this));
+        super.setDirection(generalDirection + unitData.offsetDirection(currenttime, this));
 
         super.act(time);    //To change body of overridden methods use File | Settings | File Templates.
     }

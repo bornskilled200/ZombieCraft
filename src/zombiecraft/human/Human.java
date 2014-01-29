@@ -15,14 +15,9 @@ public class Human extends SawtoothUnitData
             "A regular human that moves forward changing left and right. Like a drunken lizard that is searching for truth in a garbage can.";
     public static final String NAME = "Human";
 
-    @Override
-    public float addDirection(int time, Unit unit)
-    {
-        return 0;
-    }
 
     public Human()
     {
-        super(100, NAME, DESCRIPTION, 20, 6f);
+        super(100, NAME, DESCRIPTION, 10,5 );
     }
 }
