@@ -161,21 +161,18 @@ public class GameMap implements Screen
                 {
                     float f1 = x / (-velocityX);
                     float f2 = y / (-velocityY);
-                    float max = Math.max(f1, f2);
-                    if (f1>0)
-                        max = f2;
-                    else if (f2>0)
-                        max = f1;
                     float f3 = (x - 640 + 64) / (-velocityX);
                     float f4 = (y - 480 + 64) / (-velocityY);
-                    float min = Math.max(f3, f4);
-
-                    if (f3>0)
-                        min = f4;
-                    else if (f4>0)
-                        min = f3;
-                    float back = Math.max(max, min);
-                    if (back <= 0)
+                    float back = Float.MIN_EXPONENT;
+                    if (f1<=0)
+                        back = Math.max(back,f1);
+                    if (f2<=0)
+                        back = Math.max(back,f2);
+                    if (f3<=0)
+                        back = Math.max(back,f3);
+                    if (f4<=0)
+                        back = Math.max(back,f4);
+                    if (back <= 0 && back!=Float.MIN_EXPONENT)
                     {
                         float max1 = Math.max(1, Math.min(640 - 64 - 1, x - (back * -velocityX)));
                         float max2 = Math.max(1, Math.min(480 - 64 - 1, y - (back * -velocityY)));
