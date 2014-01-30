@@ -25,16 +25,16 @@ public class HumanPlayer extends Player
     }
     public void poll(GameMap gameMap, MainBuilding mainBuilding)
     {
-        int mouseX = Gdx.input.getX();
-        int mouseY = Gdx.input.getY();
         if (!Gdx.input.isButtonPressed(nextButton))
         {
             return;
         }
+        int mouseX = Gdx.input.getX();
+        int mouseY = Gdx.input.getY();
         nextButton = (nextButton + 1) % 2;
         GenericMovableUnit genericMovableUnit = new GenericMovableUnit(race.getAllUnits().get(0));
-        float x = mainBuilding.getX();
-        float y = mainBuilding.getY();
+        float x = mainBuilding.getX()+32;
+        float y = mainBuilding.getY()+32;
         float angle1 =
                 (float) Math.atan2(new Vector2(mouseX - x, mouseY - y).y, new Vector2(mouseX - x, mouseY - y).x) *
                 MathUtils.radiansToDegrees;
@@ -42,7 +42,7 @@ public class HumanPlayer extends Player
             angle1 += 360;
         float angle = angle1;
         genericMovableUnit.setDirection(angle);
-        genericMovableUnit.setPosition(x, y);
+        genericMovableUnit.setPosition(x-32, y-32);
 
         gameMap.addUnit(this, genericMovableUnit);
     }

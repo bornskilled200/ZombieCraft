@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
 import zombiecraft.Player;
 import zombiecraft.Unit;
 import zombiecraft.ZombieCraft;
@@ -66,7 +65,7 @@ public class GameMap implements Screen
         for (Player player : players)
         {
             MainBuilding mainBuilding = player.race.getMainBuilding();
-            mainBuilding.setPosition((float) Math.random() * 480, (float) Math.random() * 480);
+            mainBuilding.setPosition((float) Math.random() * (480-64), (float) Math.random() * (480-64));
             mainBuildings.add(mainBuilding);
             units.add(mainBuilding);
             playerMap.put(mainBuilding, player);
@@ -96,7 +95,7 @@ public class GameMap implements Screen
 
         float interpolation = accumalator / SECONDS_PER_UPDATE;
         display_game(interpolation);
-        //fpsLogger.log();
+        fpsLogger.log();
     }
 
     public void addUnit(Player player, Unit unit)
@@ -153,62 +152,33 @@ public class GameMap implements Screen
             if (unit instanceof MovableUnit)
             {
                 MovableUnit movableUnit = (MovableUnit) unit;
+
                 float velocityX = movableUnit.getVelocityX();
                 float velocityY = movableUnit.getVelocityY();
-                float x = movableUnit.getX();
-                float y = movableUnit.getY();
-                if ((velocityX != 0 && velocityY != 0) && ((x < 0 || x > 640 - 64) || (y < 0 || y > 480 - 64)))
+                float x = unit.getX();
+                float y = unit.getY();
+                if (velocityX != 0 && velocityY != 0 && (x < 0 || x > camera.viewportWidth - 64 || y < 0 || y > camera.viewportHeight - 64))
                 {
                     float f1 = x / (-velocityX);
                     float f2 = y / (-velocityY);
-                    float f3 = (x - 640 + 64) / (-velocityX);
-                    float f4 = (y - 480 + 64) / (-velocityY);
+                    float f3 = (x - camera.viewportWidth + 64) / (-velocityX);
+                    float f4 = (y - camera.viewportHeight + 64) / (-velocityY);
                     float back = Float.MIN_EXPONENT;
-                    if (f1<=0)
-                        back = Math.max(back,f1);
-                    if (f2<=0)
-                        back = Math.max(back,f2);
-                    if (f3<=0)
-                        back = Math.max(back,f3);
-                    if (f4<=0)
-                        back = Math.max(back,f4);
-                    if (back <= 0 && back!=Float.MIN_EXPONENT)
+                    if (f1 <= 0)
+                        back = Math.max(back, f1);
+                    if (f2 <= 0)
+                        back = Math.max(back, f2);
+                    if (f3 <= 0)
+                        back = Math.max(back, f3);
+                    if (f4 <= 0)
+                        back = Math.max(back, f4);
+                    if (back <= 0 && back != Float.MIN_EXPONENT)
                     {
-                        float max1 = Math.max(1, Math.min(640 - 64 - 1, x - (back * -velocityX)));
-                        float max2 = Math.max(1, Math.min(480 - 64 - 1, y - (back * -velocityY)));
+                        float max1 = Math.max(0, Math.min(camera.viewportWidth - 64, x - (back * -velocityX)));
+                        float max2 = Math.max(0, Math.min(camera.viewportHeight - 64, y - (back * -velocityY)));
 
-                        float len = new Vector2(max1 - x, max2 - y).len();
-                        if (len > 7)
-                        {
-                            System.out.println(len);
-                            System.out.println(x + ", " + y);
-                            System.out.println(max1 + ", " + max2);
-                            System.out.println("back is " + back);
-                            System.out.println(f1 + "\t" + (Math.max(1, Math.min(640 - 64 - 1, x - (f1 * -velocityX)))) + ", " +
-                                               (Math.max(1, Math.min(640 - 64 - 1, y - (f1 * -velocityY)))));
-                            System.out.println(f2 + "\t" + (Math.max(1, Math.min(640 - 64 - 1, x - (f2 * -velocityX)))) + ", " +
-                                               (Math.max(1, Math.min(640 - 64 - 1, y - (f2 * -velocityY)))));
-                            System.out.println(f3 + "\t" + (Math.max(1, Math.min(640 - 64 - 1, x - (f3 * -velocityX)))) + ", " +
-                                               (Math.max(1, Math.min(640 - 64 - 1, y - (f3 * -velocityY)))));
-                            System.out.println(f4 + "\t" + (Math.max(1, Math.min(640 - 64 - 1, x - (f4 * -velocityX)))) + ", " +
-                                               (Math.max(1, Math.min(640 - 64 - 1, y - (f4 * -velocityY)))));
-                            System.out.println();
-                        }
                         unit.setX(max1);
                         unit.setY(max2);
-                    }  else {
-                        System.out.println("SOMETHING IS WRONG");
-                        System.out.println(x + ", " + y);
-                        System.out.println("back is " + back);
-                        System.out.println(f1 + "\t" + (Math.max(1, Math.min(640 - 64 - 1, x - (f1 * -velocityX)))) + ", " +
-                                           (Math.max(1, Math.min(640 - 64 - 1, y - (f1 * -velocityY)))));
-                        System.out.println(f2 + "\t" + (Math.max(1, Math.min(640 - 64 - 1, x - (f2 * -velocityX)))) + ", " +
-                                           (Math.max(1, Math.min(640 - 64 - 1, y - (f2 * -velocityY)))));
-                        System.out.println(f3 + "\t" + (Math.max(1, Math.min(640 - 64 - 1, x - (f3 * -velocityX)))) + ", " +
-                                           (Math.max(1, Math.min(640 - 64 - 1, y - (f3 * -velocityY)))));
-                        System.out.println(f4 + "\t" + (Math.max(1, Math.min(640 - 64 - 1, x - (f4 * -velocityX)))) + ", " +
-                                           (Math.max(1, Math.min(640 - 64 - 1, y - (f4 * -velocityY)))));
-                        System.out.println();
                     }
                 }
             }
