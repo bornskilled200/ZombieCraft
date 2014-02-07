@@ -3,6 +3,7 @@ package zombiecraft.unit;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import zombiecraft.GameModel;
 import zombiecraft.Unit;
 
 
@@ -25,13 +26,14 @@ public abstract class MovableUnit extends Unit
     }
 
     @Override
-    public void act(int time)
+    public void act(int time, GameModel gameModel)
     {
         previousX = getX();
         previousY = getY();
 
-        setX(previousX + getVelocityX());
-        setY(previousY + getVelocityY());
+        float secondsPerUpdate = gameModel.getSecondsPerUpdate();
+        setX(previousX + getVelocityX()* secondsPerUpdate);
+        setY(previousY + getVelocityY()*secondsPerUpdate);
     }
 
     public void setVelocity(float dx, float dy)

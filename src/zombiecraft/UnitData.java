@@ -12,12 +12,14 @@ public abstract class UnitData {
     private int health;
     private String name;
     private String description;
+    private boolean isMovingWhenDoingDamgage;
 
-    protected UnitData(int health, String name, String description) {
+    protected UnitData(int health, String name, String description, boolean movingWhenDoingDamgage) {
 
         this.health = health;
         this.name = name;
         this.description = description;
+        isMovingWhenDoingDamgage = movingWhenDoingDamgage;
     }
 
     public int getHealth() {
@@ -35,4 +37,18 @@ public abstract class UnitData {
     public abstract float offsetDirection(int time, Unit unit);
 
     public abstract float offsetVelocity(int time, Unit unit);
+
+    /**
+     * if float is not 0, the unit will move, otherwise it will move
+     * @param time
+     * @param unit
+     * @param target
+     * @return
+     */
+    public abstract int doDamage(int time, Unit unit, Unit target);
+
+    public boolean isMovingWhenDoingDamgage()
+    {
+        return isMovingWhenDoingDamgage;  //To change body of created methods use File | Settings | File Templates.
+    }
 }

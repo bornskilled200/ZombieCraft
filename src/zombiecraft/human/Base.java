@@ -1,29 +1,43 @@
 package zombiecraft.human;
 
-import zombiecraft.unit.MainBuilding;
-import zombiecraft.UnitData;
 
+import zombiecraft.GameModel;
+import zombiecraft.UnitData;
+import zombiecraft.unit.MainBuilding;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 
 /**
  * Created by David Park on 1/7/14.
  */
-public class Base extends MainBuilding {
+public class Base extends MainBuilding
+{
     public static final String NAME = "Base";
+    private List<UnitData> allUnits;
 
-    public Base() {
+
+    public Base()
+    {
         super(NAME);
-        setHealth(100);
+        setHealth(250);
+
+        allUnits = new ArrayList<UnitData>();
+        allUnits.add(new Human());
+        allUnits.add(new Scout());
     }
 
     @Override
-    public List<UnitData> buildableUnits() {
-        return Collections.emptyList();
+    public List<UnitData> buildableUnits()
+    {
+        return allUnits;
     }
 
     @Override
-    public void act(int time) {
+    public void act(int time, GameModel gameModel)
+    {
 
     }
 }

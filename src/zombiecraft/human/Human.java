@@ -18,6 +18,20 @@ public class Human extends SawtoothUnitData
 
     public Human()
     {
-        super(100, NAME, DESCRIPTION, 10,5 );
+        super(100, NAME, DESCRIPTION, 40,40);
+    }
+
+    @Override
+    public int doDamage(int time, Unit unit, Unit target)
+    {
+        float dx = unit.getX() - target.getX();
+        float dy = unit.getY() - target.getY();
+        float v = dx * dx + dy * dy;
+        int i = 64 * 64 + 64 * 64;
+        if (v < i)
+        {
+            return 1;
+        }
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

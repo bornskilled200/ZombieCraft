@@ -4,6 +4,7 @@ import zombiecraft.human.Base;
 import zombiecraft.human.Human;
 import zombiecraft.unit.MainBuilding;
 import zombiecraft.zombie.Brain;
+import zombiecraft.zombie.Zombie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +20,6 @@ public enum Race {
         }
 
         @Override
-        public List<UnitData> getAllUnits() {
-            return null;
-        }
-
-        @Override
         public List<Trait> getStartingTraits() {
             return null;
         }
@@ -33,17 +29,6 @@ public enum Race {
             return new Base();
         }
 
-        private List<UnitData> allUnits;
-
-        @Override
-        public List<UnitData> getAllUnits() {
-            if (allUnits == null) {
-                allUnits = new ArrayList<UnitData>();
-                allUnits.add(new Human());
-            }
-            return allUnits;
-        }
-
         @Override
         public List<Trait> getStartingTraits() {
             return null;
@@ -51,8 +36,6 @@ public enum Race {
     };
 
     public abstract MainBuilding getMainBuilding();
-
-    public abstract List<UnitData> getAllUnits();
 
     public abstract List<Trait> getStartingTraits();
 }

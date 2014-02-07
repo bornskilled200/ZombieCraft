@@ -48,9 +48,20 @@ public strictfp abstract class Unit {
         return getHealth() <= 0;
     }
 
-    public abstract void act(int time);
+    public abstract void act(int time, GameModel gameModel);
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Unit{" +
+               "name='" + name + '\'' +
+               ", health=" + health +
+               ", x=" + x +
+               ", y=" + y +
+               '}';
     }
 }

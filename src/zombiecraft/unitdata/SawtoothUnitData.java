@@ -11,12 +11,12 @@ import zombiecraft.UnitData;
  * Time: 6:13 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SawtoothUnitData extends UnitData {
+public abstract class SawtoothUnitData extends UnitData {
     private final int triangleLength;
     private int velocity;
 
     protected SawtoothUnitData(int health, String name, String description, int triangleLength, int velocity) {
-        super(health, name, description);
+        super(health, name, description, false);
         this.triangleLength = triangleLength;
         this.velocity = velocity;
     }
