@@ -32,8 +32,8 @@ public class Menu implements Screen {
     public void render(float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {
             ArrayList<Player> players = new ArrayList<Player>();
-            players.add(new ComputerPlayer(Race.ZOMBIE));
-            players.add(new HumanPlayer(Race.HUMAN));
+            players.add(new ComputerPlayer(Race.HUMAN));
+            players.add(new HumanPlayer(Race.ZOMBIE));
             zombieCraft.setScreen(new GameMap(zombieCraft, players));
         }
 
