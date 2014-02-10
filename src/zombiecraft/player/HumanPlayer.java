@@ -40,20 +40,26 @@ public class HumanPlayer extends Player
         List<UnitData> unitDatas = mainBuilding.buildableUnits();
         if (getSelection() >= unitDatas.size())
             setSelection(Math.max(unitDatas.size() - 1, 0));
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+        if (getProductionDelay() <= 0)
         {
-            int mouseX = Gdx.input.getX();
-            int mouseY = Gdx.input.getY();
-            GenericMovableUnit genericMovableUnit = new GenericMovableUnit(unitDatas.get(getSelection()));
-            float x = mainBuilding.getX() + 32;
-            float y = mainBuilding.getY() + 32;
-            float angle = (float) Math.atan2(mouseY - y, mouseX - x) * MathUtils.radiansToDegrees;
-            if (angle < 0)
-                angle += 360;
-            genericMovableUnit.setDirection(angle);
-            genericMovableUnit.setPosition(x - 32, y - 32);
-
-            gameMap.addUnit(this, genericMovableUnit);
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+            {
+                int mouseX = Gdx.input.getX();
+                int mouseY = Gdx.input.getY();
+                GenericMovableUnit genericMovableUnit = new GenericMovableUnit(unitDatas.get(getSelection()));
+                float x = mainBuilding.getX() + 32;
+                float y = mainBuilding.getY() + 32;
+                float angle = (float) Math.atan2(mouseY - y, mouseX - x) * MathUtils.radiansToDegrees;
+                if (angle < 0)
+                    angle += 360;
+                genericMovableUnit.setDirection(angle);
+                genericMovableUnit.setPosition(x - 32, y - 32);
+                setProductionDelay(50);
+                setProductionDelayLength(50);
+                gameMap.addUnit(this, genericMovableUnit);
+            }
         }
+        else
+            setProductionDelay(getProductionDelay() - 1);
     }
 }

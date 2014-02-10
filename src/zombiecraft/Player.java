@@ -29,7 +29,7 @@ public abstract class Player
 
     public void setProductionDelayLength(int productionDelayLength)
     {
-        if (getProductionDelayLength()<getProductionDelay())
+        if (productionDelayLength<getProductionDelay())
             throw new IllegalArgumentException();
         this.productionDelayLength = productionDelayLength;
     }
