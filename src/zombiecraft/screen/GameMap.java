@@ -151,7 +151,7 @@ public class GameMap implements Screen, GameModel, ViewModel {
 
         Pixmap.setBlending(Pixmap.Blending.None);
         fogOfWar.setColor(Color.BLACK);
-        fogOfWar.fillRectangle(0, 0, 640, 480);
+        fogOfWar.fillRectangle(0, 0, (int) camera.viewportWidth, (int) camera.viewportHeight);
         fogOfWar.setColor(Color.CLEAR);
 
         spriteBatch.begin();
@@ -170,14 +170,14 @@ public class GameMap implements Screen, GameModel, ViewModel {
             }
             spriteBatch.draw(textures.get(unit.getName()), x, y, 32, 32, 64, 64, 1, 1, direction, 0, 0, 64, 64, false, false);
             if (playerMap.get(unit) instanceof HumanPlayer)
-                fogOfWar.fillCircle((int) x + 32, 480 - (int) y - 32, 96);
+                fogOfWar.fillCircle((int) x + 32, (int) camera.viewportHeight - (int) y - 32, 96);
             if (unit instanceof MainBuilding) {
                 Player player = playerMap.get(unit);
                 bitmapFont.draw(spriteBatch, "" + (player.getSelection() + 1), unit.getX(), unit.getY());
             }
         }
         spriteBatch.enableBlending();
-        texture.draw(fogOfWar, 0, 1024 - 480);
+        texture.draw(fogOfWar, 0, 2048 - (int) camera.viewportHeight);
         spriteBatch.draw(texture, 0, 0);   //Comment this out to see the whole map
         spriteBatch.end();
 
@@ -253,7 +253,7 @@ public class GameMap implements Screen, GameModel, ViewModel {
         maxSize = buf.get();
 
         System.out.println(maxSize);
-        texture = new Texture(1024, 1024, Pixmap.Format.RGBA8888);
+        texture = new Texture(2048, 2048, Pixmap.Format.RGBA8888);
     }
 
     @Override
