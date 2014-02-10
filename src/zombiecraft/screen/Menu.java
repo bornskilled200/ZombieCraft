@@ -39,13 +39,13 @@ public class Menu implements Screen {
 
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         spriteBatch.begin();
-        bitmapFont.drawMultiLine(spriteBatch,"Menu\nPress 1 to debug a Game Map",0,0);
+        bitmapFont.drawMultiLine(spriteBatch, "Menu\nPress 1 to debug a Game Map", 0, 0);
         spriteBatch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-        matrix4.setToOrtho2D(0, height, width, -height);
+        matrix4.setToOrtho2D(0, -height, width, height);
         spriteBatch.setProjectionMatrix(matrix4);
     }
 

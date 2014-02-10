@@ -4,9 +4,11 @@ package zombiecraft.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import zombiecraft.Player;
 import zombiecraft.Race;
 import zombiecraft.UnitData;
+import zombiecraft.ViewModel;
 import zombiecraft.screen.GameMap;
 import zombiecraft.unit.GenericMovableUnit;
 import zombiecraft.unit.MainBuilding;
@@ -26,6 +28,8 @@ public class HumanPlayer extends Player
         super(race);
     }
 
+    private final Vector3 vector3 = new Vector3();
+
     public void poll(GameMap gameMap, MainBuilding mainBuilding)
     {
         if (Gdx.input.isKeyPressed(Input.Keys.NUM_1))
@@ -44,12 +48,12 @@ public class HumanPlayer extends Player
         {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
             {
-                int mouseX = Gdx.input.getX();
-                int mouseY = Gdx.input.getY();
+                vector3.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                gameMap.unproject(vector3);
                 GenericMovableUnit genericMovableUnit = new GenericMovableUnit(unitDatas.get(getSelection()));
                 float x = mainBuilding.getX() + 32;
                 float y = mainBuilding.getY() + 32;
-                float angle = (float) Math.atan2(mouseY - y, mouseX - x) * MathUtils.radiansToDegrees;
+                float angle = (float) Math.atan2(vector3.y - y, vector3.x - x) * MathUtils.radiansToDegrees;
                 if (angle < 0)
                     angle += 360;
                 genericMovableUnit.setDirection(angle);

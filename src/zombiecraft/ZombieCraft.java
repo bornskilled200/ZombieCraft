@@ -31,7 +31,7 @@ public class ZombieCraft extends Game {
     @Override
     public void create() {
         spriteBatch = new SpriteBatch();
-        bitmapFont = new BitmapFont(true);
+        bitmapFont = new BitmapFont();
 
         menu = new Menu(this);
 
