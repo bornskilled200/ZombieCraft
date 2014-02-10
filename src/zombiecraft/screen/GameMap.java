@@ -154,20 +154,21 @@ public class GameMap implements Screen, GameModel, ViewModel {
         fogOfWar.fillRectangle(0, 0, 640, 480);
         fogOfWar.setColor(Color.CLEAR);
 
-
         spriteBatch.begin();
         for (Unit unit : units) {
             float x = unit.getX();
             float y = unit.getY();
+            float direction = 0;
             if (unit instanceof MovableUnit) {
                 MovableUnit movableUnit = (MovableUnit) unit;
                 x = Interpolation.linear.apply(movableUnit.getPreviousX(), x,
                         interpolation);//previousX + (x- previousX)*interpolation;
                 y = Interpolation.linear.apply(movableUnit.getPreviousY(), y,
                         interpolation);//previousY + (y- previousY)*interpolation;
+                direction = movableUnit.getDirection();
 
             }
-            spriteBatch.draw(textures.get(unit.getName()), x, y);
+            spriteBatch.draw(textures.get(unit.getName()), x, y, 32, 32, 64, 64, 1, 1, direction, 0, 0, 64, 64, false, false);
             if (playerMap.get(unit) instanceof HumanPlayer)
                 fogOfWar.fillCircle((int) x + 32, 480 - (int) y - 32, 96);
             if (unit instanceof MainBuilding) {
