@@ -1,8 +1,9 @@
 package zombiecraft.unitdata;
 
 
-import zombiecraft.Unit;
 import zombiecraft.UnitData;
+import zombiecraft.unit.GenericMovableUnit;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,23 +14,20 @@ import zombiecraft.UnitData;
  */
 public abstract class SawtoothUnitData extends UnitData {
     private final int triangleLength;
-    private int velocity;
+    private int striaghtLine;
+    private int angle;
 
-    protected SawtoothUnitData(int health, String name, String description, int triangleLength, int velocity) {
-        super(health, name, description, false);
+    protected SawtoothUnitData(int health, String name, String description, int hitRadius, int productionDelay, int triangleLength, int striaghtLine, int angle) {
+        super(health, name, description, false, hitRadius, productionDelay);
         this.triangleLength = triangleLength;
-        this.velocity = velocity;
+        this.striaghtLine = striaghtLine;
+        this.angle = angle;
     }
 
     @Override
-    public float offsetDirection(int time, Unit unit) {
-        if (time < triangleLength)
+    public float offsetDirection(int time, GenericMovableUnit unit) {
+        if (time < striaghtLine)
             return 0;
-        return (time / triangleLength) % 2 == 0 ? 45 : -45;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public float offsetVelocity(int time, Unit unit) {
-        return velocity;
+        return (time / (triangleLength-striaghtLine)) % 2 == 0 ? angle : -angle;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

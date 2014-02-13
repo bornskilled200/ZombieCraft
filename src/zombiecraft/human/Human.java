@@ -1,7 +1,9 @@
 package zombiecraft.human;
 
 
+import zombiecraft.GameModel;
 import zombiecraft.Unit;
+import zombiecraft.unit.GenericMovableUnit;
 import zombiecraft.unitdata.SawtoothUnitData;
 
 
@@ -18,20 +20,52 @@ public class Human extends SawtoothUnitData
 
     public Human()
     {
-        super(100, NAME, DESCRIPTION, 40,40);
+        super(100, NAME, DESCRIPTION, 32, 40, 80, 20, 70);
     }
 
     @Override
-    public int doDamage(int time, Unit unit, Unit target)
+    public int getHurtRadius()
     {
-        float dx = unit.getX() - target.getX();
-        float dy = unit.getY() - target.getY();
-        float v = dx * dx + dy * dy;
-        int i = 64 * 64 + 64 * 64;
-        if (v < i)
+        return 48;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public float offsetVelocity(int time, GenericMovableUnit unit)
+    {
+        return 40;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public int getVisionRadius()
+    {
+        return 64;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public int doDamage(int time, GenericMovableUnit unit, Unit target)
+    {
+        if (isAttackable(unit,target))
         {
             return 1;
         }
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void doCollision(int time, GenericMovableUnit unit, Unit target)
+    {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void preAct(int time, GenericMovableUnit unit, GameModel gameModel)
+    {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void postAct(int time, GenericMovableUnit unit, GameModel gameModel)
+    {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

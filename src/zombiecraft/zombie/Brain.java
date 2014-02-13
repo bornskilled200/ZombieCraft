@@ -3,6 +3,7 @@ package zombiecraft.zombie;
 
 import zombiecraft.GameModel;
 import zombiecraft.UnitData;
+import zombiecraft.unit.GenericMovableUnit;
 import zombiecraft.unit.MainBuilding;
 
 import java.util.ArrayList;
@@ -12,18 +13,24 @@ import java.util.List;
 /**
  * Created by David Park on 1/7/14.
  */
-public class Brain extends MainBuilding
+public class  Brain extends MainBuilding
 {
     public static final String NAME = "Brain";
     private ArrayList<UnitData> allUnits;
 
     public Brain()
     {
-        super(NAME);
+        super(NAME, 20);
         setHealth(250);
         allUnits = new ArrayList<UnitData>();
         allUnits.add(new Zombie());
         allUnits.add(new Crasher());
+    }
+
+    @Override
+    public GenericMovableUnit createUnit(UnitData unitData)
+    {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -33,8 +40,8 @@ public class Brain extends MainBuilding
     }
 
     @Override
-    public void act(int time, GameModel gameModel)
+    public int getVisionRadius()
     {
-
+        return 96;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

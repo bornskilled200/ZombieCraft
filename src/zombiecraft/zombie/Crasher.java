@@ -1,8 +1,10 @@
 package zombiecraft.zombie;
 
 
+import zombiecraft.GameModel;
 import zombiecraft.Unit;
 import zombiecraft.UnitData;
+import zombiecraft.unit.GenericMovableUnit;
 
 
 /**
@@ -14,37 +16,61 @@ import zombiecraft.UnitData;
  */
 public class Crasher extends UnitData
 {
-    private static final int RANGE = 32;
 
     protected Crasher()
     {
-        super(200, "Crasher", "Big mean thingamabob.", true);
+        super(200, "Crasher", "Big mean thingamabob.", true, 22, 20);
     }
 
     @Override
-    public float offsetDirection(int time, Unit unit)
+    public int getHurtRadius()
+    {
+        return 22;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public float offsetDirection(int time, GenericMovableUnit unit)
     {
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public float offsetVelocity(int time, Unit unit)
+    public float offsetVelocity(int time, GenericMovableUnit unit)
     {
-        return 40;  //To change body of implemented methods use File | Settings | File Templates.
+        return 80;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public int doDamage(int time, Unit unit, Unit target)
+    public int getVisionRadius()
     {
-        float dx = unit.getX() - target.getX();
-        float dy = unit.getY() - target.getY();
-        float v = dx * dx + dy * dy;
-        int i = RANGE * RANGE + RANGE * RANGE;
-        if (v < i)
+        return 32;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public int doDamage(int time, GenericMovableUnit unit, Unit target)
+    {
+        if (isAttackable(unit,target))
         {
-            System.out.println(unit + " vs " + target);
             return 2;
         }
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void doCollision(int time, GenericMovableUnit unit, Unit target)
+    {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void preAct(int time, GenericMovableUnit unit, GameModel gameModel)
+    {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void postAct(int time, GenericMovableUnit unit, GameModel gameModel)
+    {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

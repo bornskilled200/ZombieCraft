@@ -30,4 +30,6 @@ public interface GameModel
     void addUnit(Player player, Unit unit);
 
     public float getSecondsPerUpdate();
+
+    public int getCurrentUpdate();
 }

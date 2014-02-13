@@ -20,9 +20,9 @@ public abstract class MovableUnit extends Unit
     private float velocity;
     private int time;
 
-    public MovableUnit(String name)
+    public MovableUnit(String name, int hitRadius)
     {
-        super(name);
+        super(name, hitRadius);
     }
 
     @Override

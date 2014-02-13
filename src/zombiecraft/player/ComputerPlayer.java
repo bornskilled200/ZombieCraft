@@ -1,10 +1,10 @@
 package zombiecraft.player;
 
+import zombiecraft.GameModel;
 import zombiecraft.Player;
 import zombiecraft.Race;
-import zombiecraft.screen.GameMap;
-import zombiecraft.unit.GenericMovableUnit;
-import zombiecraft.unit.MainBuilding;
+import zombiecraft.ViewModel;
+
 
 /**
  * Created by David Park on 1/7/14.
@@ -15,6 +15,6 @@ public class ComputerPlayer extends Player {
     }
 
 
-    public void poll(GameMap gameMap, MainBuilding mainBuilding) {
+    public void poll(GameModel gameModel, ViewModel viewModel) {
     }
 }

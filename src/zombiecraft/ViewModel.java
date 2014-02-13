@@ -7,5 +7,8 @@ import com.badlogic.gdx.math.Vector3;
  */
 public interface ViewModel {
 
-    public void unproject(Vector3 mouse);
+    public void setUnprojectPosition(float x, float y);
+
+    public float getUnprojectX();
+    public float getUnprojectY();
 }

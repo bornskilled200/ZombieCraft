@@ -1,5 +1,6 @@
 package zombiecraft.unit;
 
+import zombiecraft.GameModel;
 import zombiecraft.Unit;
 import zombiecraft.UnitData;
 
@@ -11,16 +12,27 @@ import java.util.List;
  */
 public abstract class MainBuilding extends Unit {
 
-    private List<Unit> units;
-
-    public MainBuilding(String name) {
-        super(name);
-        this.units = new ArrayList<Unit>();
+    public MainBuilding(String name, int hitRadius) {
+        super(name, hitRadius);
     }
 
-    public List<Unit> enteredUnits() {
-        return units;
+    @Override
+    public void act(int time, GameModel gameModel)
+    {
+        for (Unit unit : gameModel.getUnits())
+        {
+            if (UnitData.isColliding(this,unit) && unit instanceof GenericMovableUnit)
+            {
+                GenericMovableUnit genericMovableUnit = (GenericMovableUnit) unit;
+                if (genericMovableUnit.getStates().contains(GenericMovableUnit.State.RETREAT))
+                {
+                    unit.setHealth(0);
+                }
+            }
+        }
     }
+
+    public abstract GenericMovableUnit createUnit(UnitData unitData);
 
     public abstract List<UnitData> buildableUnits();
 }

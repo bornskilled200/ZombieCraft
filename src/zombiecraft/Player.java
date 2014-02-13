@@ -1,10 +1,6 @@
 package zombiecraft;
 
 
-import zombiecraft.screen.GameMap;
-import zombiecraft.unit.MainBuilding;
-
-
 /**
  * Controller, accesses both the View and Model
  * Created by David Park on 1/7/14.
@@ -16,6 +12,11 @@ public abstract class Player
     //0 when it can produce a unit
     public int productionDelay;
     public int productionDelayLength;
+
+    public Player(Race race)
+    {
+        this.race = race;
+    }
 
     public Race getRace()
     {
@@ -29,14 +30,9 @@ public abstract class Player
 
     public void setProductionDelayLength(int productionDelayLength)
     {
-        if (productionDelayLength<getProductionDelay())
+        if (productionDelayLength < getProductionDelay())
             throw new IllegalArgumentException();
         this.productionDelayLength = productionDelayLength;
-    }
-
-    public Player(Race race)
-    {
-        this.race = race;
     }
 
     public int getSelection()
@@ -59,7 +55,5 @@ public abstract class Player
         this.productionDelay = productionDelay;
     }
 
-
-
-    public abstract void poll(GameMap gameMap, MainBuilding mainBuilding);
+    public abstract void poll(GameModel gameModel, ViewModel viewModel);
 }

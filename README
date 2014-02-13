@@ -1,23 +1,16 @@
 Overmind
 	Trait
-		Can see where all zombies are
 		Can tell them to come back whenever
-		Every Zombie is randomly (not really) given (kind of like tetris)
 	Units
-		Wandering	(Moves randomly)
-		Patrolling	(Patrols between 2 points of already seen map)
-		Meandaring	(Goes kind of straight, randomly adjust angle)
-		Hulking		(Goes straight, damages things in front of it)
-	Upgrades
-		Infection	(Infects other units to turin into zombies)
+		Zombie	    (Goes kind of straight, randomly adjust angle)
+		Hulking		(Goes straight, damages things that gets in its way)
 	Ideas
 
 
 Humans
 	Trait
-		All humans can be upgraded
-		See's where things are when humans come back to base
-		Can make safehouses (Just like a mainbuilding where units can enter)
+	    Can send a scout that moves fast and brings back units.
 	Units
-		Human
+		Human       (Moves in a seesaw fashion)
+		Mercenary   (Travels circular motion away from the Base)
 	

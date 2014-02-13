@@ -12,8 +12,10 @@ import com.badlogic.gdx.utils.BufferUtils;
 import zombiecraft.*;
 import zombiecraft.human.Base;
 import zombiecraft.human.Human;
+import zombiecraft.human.Mercenary;
 import zombiecraft.human.Scout;
 import zombiecraft.player.HumanPlayer;
+import zombiecraft.unit.GenericMovableUnit;
 import zombiecraft.unit.MainBuilding;
 import zombiecraft.unit.MovableUnit;
 import zombiecraft.zombie.Brain;
@@ -30,13 +32,15 @@ import java.util.Map;
  * The View and Model, need to separate
  * Created by David Park on 1/7/14.
  */
-public class GameMap implements Screen, GameModel, ViewModel {
-    private final SpriteBatch spriteBatch;
-    private final BitmapFont bitmapFont;
+public class GameMap implements Screen, GameModel, ViewModel
+{
     private final float UPDATES_PER_SECOND = 25;
     public final float SECONDS_PER_UPDATE = 1 / UPDATES_PER_SECOND;
-    private final int MAX_FRAME_SKIP = 5;
-    public float accumalator;
+    public final Vector3 vector;
+    private final SpriteBatch spriteBatch;
+    private final BitmapFont bitmapFont;
+    private final boolean debug;
+    public float accumulator;
     FPSLogger fpsLogger = new FPSLogger();
     private OrthographicCamera camera;
     private Map<String, Texture> textures;
@@ -49,9 +53,10 @@ public class GameMap implements Screen, GameModel, ViewModel {
     private int time;
     private Pixmap fogOfWar;
     private Texture texture;
-    private int maxSize;
 
-    public GameMap(ZombieCraft zombieCraft, List<Player> players) {
+    public GameMap(ZombieCraft zombieCraft, List<Player> players, boolean randomPlacement, boolean debug)
+    {
+        this.debug = debug;
         this.spriteBatch = zombieCraft.getSpriteBatch();
         this.bitmapFont = zombieCraft.getBitmapFont();
         this.zombieCraft = zombieCraft;
@@ -64,7 +69,8 @@ public class GameMap implements Screen, GameModel, ViewModel {
         mainBuildingMap = new HashMap<Player, MainBuilding>();
         camera = new OrthographicCamera();
 
-        for (Player player : players) {
+        for (Player player : players)
+        {
             MainBuilding mainBuilding = player.race.getMainBuilding();
             mainBuilding.setPosition((float) Math.random() * (480 - 64), (float) Math.random() * (480 - 64));
             mainBuildings.add(mainBuilding);
@@ -76,64 +82,76 @@ public class GameMap implements Screen, GameModel, ViewModel {
 
         textures.put(Base.NAME, new Texture(Gdx.files.internal("assets/human/mainbuilding.png")));
         textures.put(Human.NAME, new Texture(Gdx.files.internal("assets/human/human.png")));
+        textures.put(Mercenary.NAME, new Texture(Gdx.files.internal("assets/human/mercenary.png")));
         textures.put(Scout.NAME, new Texture(Gdx.files.internal("assets/human/scout.png")));
         textures.put(Brain.NAME, new Texture(Gdx.files.internal("assets/zombie/mainbuilding.png")));
         textures.put(Zombie.NAME, new Texture(Gdx.files.internal("assets/zombie/zombie.png")));
         textures.put("Crasher", new Texture(Gdx.files.internal("assets/zombie/hulk.png")));
         Gdx.gl.glClearColor(1, 1, 1, 0);
+        vector = new Vector3();
     }
 
     @Override
-    public Map<Player, MainBuilding> getMainBuildingMap() {
+    public Map<Player, MainBuilding> getMainBuildingMap()
+    {
         return mainBuildingMap;
     }
 
     @Override
-    public List<MainBuilding> getMainBuildings() {
+    public List<MainBuilding> getMainBuildings()
+    {
         return mainBuildings;
     }
 
     @Override
-    public List<Unit> getUnits() {
+    public List<Unit> getUnits()
+    {
         return units;
     }
 
     @Override
-    public Map<Unit, Player> getPlayerMap() {
+    public Map<Unit, Player> getPlayerMap()
+    {
         return playerMap;
     }
 
     @Override
-    public List<Player> getPlayers() {
+    public List<Player> getPlayers()
+    {
         return players;
     }
 
     @Override
-    public void render(float delta) {
-        accumalator += delta;
+    public void render(float delta)
+    {
+        accumulator += delta;
 
         int loops = 0;
-        while (accumalator > SECONDS_PER_UPDATE && loops < MAX_FRAME_SKIP) {
+        int MAX_FRAME_SKIP = 5;
+        while (accumulator > SECONDS_PER_UPDATE && loops < MAX_FRAME_SKIP)
+        {
             update_game(time);
 
-            accumalator -= SECONDS_PER_UPDATE;
+            accumulator -= SECONDS_PER_UPDATE;
             time++;
             loops++;
         }
 
-        float interpolation = accumalator / SECONDS_PER_UPDATE;
+        float interpolation = accumulator / SECONDS_PER_UPDATE;
         display_game(interpolation);
         fpsLogger.log();
     }
 
     @Override
-    public void addUnit(Player player, Unit unit) {
+    public void addUnit(Player player, Unit unit)
+    {
         if (unit instanceof MainBuilding)
             throw new IllegalArgumentException("Why are you adding a Main Building, stop that");
         if (players.contains(player) == false)
             throw new IllegalArgumentException("This player does not exist in this map");
 
-        if (unit instanceof MovableUnit) {
+        if (unit instanceof MovableUnit)
+        {
             MovableUnit movableUnit = (MovableUnit) unit;
             movableUnit.setTime(time);
         }
@@ -142,36 +160,69 @@ public class GameMap implements Screen, GameModel, ViewModel {
     }
 
     @Override
-    public float getSecondsPerUpdate() {
+    public float getSecondsPerUpdate()
+    {
         return SECONDS_PER_UPDATE;
     }
 
-    private void display_game(float interpolation) {
+    @Override
+    public int getCurrentUpdate()
+    {
+        return time;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    private void display_game(float interpolation)
+    {
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
         Pixmap.setBlending(Pixmap.Blending.None);
-        fogOfWar.setColor(Color.BLACK);
+        if (debug == true)
+            fogOfWar.setColor(Color.CLEAR);
+        else
+            fogOfWar.setColor(Color.BLACK);
         fogOfWar.fillRectangle(0, 0, (int) camera.viewportWidth, (int) camera.viewportHeight);
-        fogOfWar.setColor(Color.CLEAR);
+        if (debug == false)
+            fogOfWar.setColor(Color.CLEAR);
 
         spriteBatch.begin();
-        for (Unit unit : units) {
+        for (Unit unit : units)
+        {
             float x = unit.getX();
             float y = unit.getY();
             float direction = 0;
-            if (unit instanceof MovableUnit) {
+            if (unit instanceof MovableUnit)
+            {
                 MovableUnit movableUnit = (MovableUnit) unit;
                 x = Interpolation.linear.apply(movableUnit.getPreviousX(), x,
-                        interpolation);//previousX + (x- previousX)*interpolation;
+                                               interpolation);//previousX + (x- previousX)*interpolation;
                 y = Interpolation.linear.apply(movableUnit.getPreviousY(), y,
-                        interpolation);//previousY + (y- previousY)*interpolation;
+                                               interpolation);//previousY + (y- previousY)*interpolation;
                 direction = movableUnit.getDirection();
 
             }
-            spriteBatch.draw(textures.get(unit.getName()), x, y, 32, 32, 64, 64, 1, 1, direction, 0, 0, 64, 64, false, false);
-            if (playerMap.get(unit) instanceof HumanPlayer)
-                fogOfWar.fillCircle((int) x + 32, (int) camera.viewportHeight - (int) y - 32, 96);
-            if (unit instanceof MainBuilding) {
+            spriteBatch.draw(textures.get(unit.getName()), x, y, 32, 32, 64, 64, 1, 1, direction, 0, 0, 64, 64, false,
+                             false);
+            if (debug == true)
+            {
+                fogOfWar.setColor(Color.BLACK);
+                fogOfWar.drawCircle((int) x + 32, (int) camera.viewportHeight - (int) y - 32, unit.getHitRadius());
+                //if (playerMap.get(unit) instanceof HumanPlayer)
+                if (unit instanceof GenericMovableUnit)
+                {
+                    GenericMovableUnit genericMovableUnit = (GenericMovableUnit) unit;
+                    fogOfWar.setColor(Color.RED);
+                    fogOfWar.drawCircle((int) x + 32, (int) camera.viewportHeight - (int) y - 32,
+                                        genericMovableUnit.getHurtRadius());
+                }
+            }
+            else
+            {
+                if (playerMap.get(unit) instanceof HumanPlayer)
+                    fogOfWar.fillCircle((int) x + 32, (int) camera.viewportHeight - (int) y - 32,
+                                        unit.getVisionRadius());
+            }
+            if (unit instanceof MainBuilding)
+            {
                 Player player = playerMap.get(unit);
                 bitmapFont.draw(spriteBatch, "" + (player.getSelection() + 1), unit.getX(), unit.getY());
             }
@@ -183,14 +234,18 @@ public class GameMap implements Screen, GameModel, ViewModel {
 
     }
 
-    private void update_game(int time) {
-        for (Player player : players) {
-            player.poll(this, mainBuildingMap.get(player));
+    private void update_game(int time)
+    {
+        for (Player player : players)
+        {
+            player.poll(this, this);
         }
 
-        for (Unit unit : units) {
+        for (Unit unit : units)
+        {
             unit.act(time, this);
-            if (unit instanceof MovableUnit) {
+            if (unit instanceof MovableUnit)
+            {
                 MovableUnit movableUnit = (MovableUnit) unit;
 
                 float velocityX = movableUnit.getVelocityX();
@@ -198,11 +253,13 @@ public class GameMap implements Screen, GameModel, ViewModel {
                 float x = unit.getX();
                 float y = unit.getY();
                 if (velocityX != 0 && velocityY != 0 &&
-                        (x < 0 || x > camera.viewportWidth - 64 || y < 0 || y > camera.viewportHeight - 64)) {
+                    (x < 0 || x > camera.viewportWidth - unit.getHitRadius() || y < 0 ||
+                     y > camera.viewportHeight - unit.getHitRadius()))
+                {
                     float f1 = x / (-velocityX);
                     float f2 = y / (-velocityY);
-                    float f3 = (x - camera.viewportWidth + 64) / (-velocityX);
-                    float f4 = (y - camera.viewportHeight + 64) / (-velocityY);
+                    float f3 = (x - camera.viewportWidth + unit.getHitRadius()) / (-velocityX);
+                    float f4 = (y - camera.viewportHeight + unit.getHitRadius()) / (-velocityY);
                     float back = Float.MIN_EXPONENT;
                     if (f1 <= 0)
                         back = Math.max(back, f1);
@@ -212,9 +269,12 @@ public class GameMap implements Screen, GameModel, ViewModel {
                         back = Math.max(back, f3);
                     if (f4 <= 0)
                         back = Math.max(back, f4);
-                    if (back <= 0 && back != Float.MIN_EXPONENT) {
-                        float max1 = Math.max(0, Math.min(camera.viewportWidth - 64, x - (back * -velocityX)));
-                        float max2 = Math.max(0, Math.min(camera.viewportHeight - 64, y - (back * -velocityY)));
+                    if (back <= 0 && back != Float.MIN_EXPONENT)
+                    {
+                        float max1 = Math.max(0, Math.min(camera.viewportWidth - unit.getHitRadius(),
+                                                          x - (back * -velocityX)));
+                        float max2 = Math.max(0, Math.min(camera.viewportHeight - unit.getHitRadius(),
+                                                          y - (back * -velocityY)));
 
                         unit.setX(max1);
                         unit.setY(max2);
@@ -223,21 +283,24 @@ public class GameMap implements Screen, GameModel, ViewModel {
             }
         }
 
-        for (int i = units.size() - 1; i >= 0; i--) {
+        for (int i = units.size() - 1; i >= 0; i--)
+        {
             Unit unit = units.get(i);
 
-            if (!unit.isDead())
+            if (unit.isAlive())
                 continue;
 
             units.remove(i);
-            if (unit instanceof MainBuilding && mainBuildings.remove(unit) && mainBuildings.size() == 1) {
+            if (unit instanceof MainBuilding && mainBuildings.remove(unit) && mainBuildings.size() == 1)
+            {
                 zombieCraft.setScreen(zombieCraft.getMenu());
             }
         }
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(int width, int height)
+    {
         camera.setToOrtho(false, width, height);
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
@@ -247,37 +310,57 @@ public class GameMap implements Screen, GameModel, ViewModel {
     }
 
     @Override
-    public void show() {
+    public void show()
+    {
         IntBuffer buf = BufferUtils.newIntBuffer(16);
         Gdx.gl.glGetIntegerv(GL10.GL_MAX_TEXTURE_SIZE, buf);
-        maxSize = buf.get();
+        int maxSize = buf.get();
 
         System.out.println(maxSize);
         texture = new Texture(2048, 2048, Pixmap.Format.RGBA8888);
     }
 
     @Override
-    public void hide() {
+    public void hide()
+    {
 
     }
 
     @Override
-    public void pause() {
+    public void pause()
+    {
 
     }
 
     @Override
-    public void resume() {
+    public void resume()
+    {
 
     }
 
     @Override
-    public void dispose() {
-
+    public void dispose()
+    {
+        fogOfWar.dispose();
+        texture.dispose();
     }
 
     @Override
-    public void unproject(Vector3 mouse) {
-        camera.unproject(mouse);
+    public void setUnprojectPosition(float x, float y)
+    {
+        vector.set(x, y, 0);
+        camera.unproject(vector);
+    }
+
+    @Override
+    public float getUnprojectX()
+    {
+        return vector.x;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public float getUnprojectY()
+    {
+        return vector.y;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

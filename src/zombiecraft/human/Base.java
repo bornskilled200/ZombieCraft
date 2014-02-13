@@ -3,10 +3,10 @@ package zombiecraft.human;
 
 import zombiecraft.GameModel;
 import zombiecraft.UnitData;
+import zombiecraft.unit.GenericMovableUnit;
 import zombiecraft.unit.MainBuilding;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -21,12 +21,19 @@ public class Base extends MainBuilding
 
     public Base()
     {
-        super(NAME);
+        super(NAME, 22);
         setHealth(250);
 
         allUnits = new ArrayList<UnitData>();
         allUnits.add(new Human());
         allUnits.add(new Scout());
+        allUnits.add(new Mercenary());
+    }
+
+    @Override
+    public GenericMovableUnit createUnit(UnitData unitData)
+    {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -36,8 +43,8 @@ public class Base extends MainBuilding
     }
 
     @Override
-    public void act(int time, GameModel gameModel)
+    public int getVisionRadius()
     {
-
+        return 96;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

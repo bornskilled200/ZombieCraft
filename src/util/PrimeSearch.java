@@ -34,4 +34,4 @@ class PrimeSearch {
         int rc = new Random().nextInt(prime) + 1;
         System.out.println(ra + " " + rb + " " + rc);
     }
-};
+}
