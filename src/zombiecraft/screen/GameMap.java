@@ -221,10 +221,12 @@ public class GameMap implements Screen, GameModel, ViewModel
                     fogOfWar.fillCircle((int) x + 32, (int) camera.viewportHeight - (int) y - 32,
                                         unit.getVisionRadius());
             }
+            bitmapFont.draw(spriteBatch, "Health " + unit.getHealth(), unit.getX(), unit.getY()+80);
             if (unit instanceof MainBuilding)
             {
                 Player player = playerMap.get(unit);
                 bitmapFont.draw(spriteBatch, "" + (player.getSelection() + 1), unit.getX(), unit.getY());
+                bitmapFont.draw(spriteBatch, "Delay " + player.getProductionDelay() + "/"+player.getProductionDelayLength(), unit.getX(), unit.getY()+96);
             }
         }
         spriteBatch.enableBlending();

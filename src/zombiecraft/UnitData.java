@@ -54,6 +54,14 @@ public abstract class UnitData
         return dx * dx + dy * dy < hitHurtRadius * hitHurtRadius;
     }
 
+    public static boolean isVisible(Unit unit, Unit other)
+    {
+        float dx = unit.getX() - other.getX();
+        float dy = unit.getY() - other.getY();
+        int visionHitRadius = unit.getVisionRadius() + other.getHitRadius();
+        return dx * dx + dy * dy < visionHitRadius * visionHitRadius;
+    }
+
     public int getProductionDelay()
     {
         return productionDelay;

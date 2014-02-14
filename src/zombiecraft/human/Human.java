@@ -20,7 +20,7 @@ public class Human extends SawtoothUnitData
 
     public Human()
     {
-        super(100, NAME, DESCRIPTION, 32, 40, 80, 20, 70);
+        super(75, NAME, DESCRIPTION, 32, 75, 80, 20, 70);
     }
 
     @Override

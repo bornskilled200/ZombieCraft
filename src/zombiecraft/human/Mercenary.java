@@ -21,20 +21,20 @@ public class Mercenary extends UnitData
     protected Mercenary()
     {
         super(25, NAME, "Pay me and I will get rid of your enemies. My services are not cheap.", false, 32,
-              125);
+              175);
     }
 
     @Override
     public int getHurtRadius()
     {
-        return 48;  //To change body of implemented methods use File | Settings | File Templates.
+        return 64;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public float offsetDirection(int time, GenericMovableUnit unit)
     {
         return time < 80 ? 0 : (90+(time - 80) *
-                                .6f);  //To change body of implemented methods use File | Settings | File Templates.
+                                .5f);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -53,7 +53,7 @@ public class Mercenary extends UnitData
     public int doDamage(int time, GenericMovableUnit unit, Unit target)
     {
         if (isAttackable(unit, target))
-            return 2;  //To change body of implemented methods use File | Settings | File Templates.
+            return 5;  //To change body of implemented methods use File | Settings | File Templates.
         return 0;
     }
 

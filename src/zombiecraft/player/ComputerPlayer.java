@@ -1,20 +1,112 @@
 package zombiecraft.player;
 
-import zombiecraft.GameModel;
-import zombiecraft.Player;
-import zombiecraft.Race;
-import zombiecraft.ViewModel;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
+import zombiecraft.*;
+import zombiecraft.unit.GenericMovableUnit;
+import zombiecraft.unit.MainBuilding;
+
+import java.util.ArrayDeque;
+import java.util.List;
+import java.util.Queue;
 
 
 /**
  * Created by David Park on 1/7/14.
  */
-public class ComputerPlayer extends Player {
-    public ComputerPlayer(Race race) {
+public class ComputerPlayer extends Player
+{
+    Queue<GenericMovableUnit> rememberedUnits;
+    float degreeOfFreedom = 360;
+    float currentDirection;
+
+    public ComputerPlayer(Race race)
+    {
         super(race);
+        switch (race)
+        {
+            case ZOMBIE:
+                break;
+            default:
+                Gdx.app.error("Computer", "ComputerPlayer does not support AI for " + race);
+                break;
+        }
+        rememberedUnits = new ArrayDeque<GenericMovableUnit>();
     }
 
+    public void poll(GameModel gameModel, ViewModel viewModel)
+    {
+        if (race != Race.ZOMBIE)
+            return;
+        boolean targetFound = false;
+        List<Unit> units = gameModel.getUnits();
+        for (Unit unit : units)
+        {
+            if (unit instanceof GenericMovableUnit && gameModel.getPlayerMap().get(unit) == this)
+            {
+                GenericMovableUnit genericMovableUnit = (GenericMovableUnit) unit;
+                for (Unit other : units)
+                {
+                    if (unit == other || gameModel.getPlayerMap().get(unit) == gameModel.getPlayerMap().get(other))
+                        continue;
+                    int i = genericMovableUnit.getUnitData()
+                                              .doDamage(gameModel.getCurrentUpdate(), genericMovableUnit, other);
+                    if (i > 0)
+                    {
+                        if (rememberedUnits.contains(genericMovableUnit))
+                            degreeOfFreedom *= .90;
+                        else
+                            degreeOfFreedom *= .98;
+                        currentDirection = genericMovableUnit.getGeneralDirection() - degreeOfFreedom / 2;
+                        targetFound = true;
+                    }
+                }
+            }
+        }
+        if (targetFound == false && degreeOfFreedom < 360)
+            degreeOfFreedom += .2f;
 
-    public void poll(GameModel gameModel, ViewModel viewModel) {
+
+        MainBuilding mainBuilding = gameModel.getMainBuildingMap().get(this);
+        if (getProductionDelay() <= 0)
+        {
+            UnitData unitData = mainBuilding.buildableUnits().get(0);
+            setProductionDelayLength(unitData.getProductionDelay());
+            setProductionDelay(unitData.getProductionDelay());
+
+            GenericMovableUnit genericMovableUnit = new GenericMovableUnit(unitData);
+            genericMovableUnit.setDirection((float) (currentDirection + (degreeOfFreedom * Math.random())) % 360);
+            System.out.println(currentDirection + " + " + degreeOfFreedom);
+            genericMovableUnit.setPosition(mainBuilding.getX(), mainBuilding.getY());
+            rememberedUnits.offer(genericMovableUnit);
+            if (rememberedUnits.size() > 6)
+                rememberedUnits.poll();
+            gameModel.addUnit(this, genericMovableUnit);
+        }
+
+        for (Unit unit : units)
+        {
+            if (gameModel.getPlayerMap().get(unit) != this)
+            {
+                if (UnitData.isVisible(mainBuilding, unit))
+                {
+                    for (Unit unit1 : units)
+                    {
+                        if (gameModel.getPlayerMap().get(unit1) == this && unit1 instanceof GenericMovableUnit && UnitData.isVisible(mainBuilding,unit1)==false)
+                        {
+                            GenericMovableUnit genericMovableUnit = (GenericMovableUnit) unit1;
+                            float angle =
+                                    (float) Math.atan2(unit.getY() - unit1.getY(), unit.getX() - unit1.getX()) *
+                                    MathUtils.radiansToDegrees;
+                            if (angle < 0)
+                                angle += 360;
+                            genericMovableUnit.setDirection(angle);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
     }
 }

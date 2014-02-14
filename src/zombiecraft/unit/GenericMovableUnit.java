@@ -134,6 +134,11 @@ public class GenericMovableUnit extends MovableUnit
         return unitData.getHurtRadius();
     }
 
+    public float getGeneralDirection()
+    {
+        return generalDirection;
+    }
+
     /**
      * A horrible hack for not being able to have state information for each individual unit
      */

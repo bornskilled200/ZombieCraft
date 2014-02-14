@@ -49,7 +49,8 @@ public class HumanPlayer extends Player
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
             {
                 viewModel.setUnprojectPosition(Gdx.input.getX(), Gdx.input.getY());
-                GenericMovableUnit genericMovableUnit = new GenericMovableUnit(unitDatas.get(getSelection()));
+                UnitData unitData = unitDatas.get(getSelection());
+                GenericMovableUnit genericMovableUnit = new GenericMovableUnit(unitData);
                 float x = mainBuilding.getX() + 32;
                 float y = mainBuilding.getY() + 32;
                 float angle = (float) Math.atan2(viewModel.getUnprojectY() - y, viewModel.getUnprojectX() - x) * MathUtils.radiansToDegrees;
@@ -57,12 +58,10 @@ public class HumanPlayer extends Player
                     angle += 360;
                 genericMovableUnit.setDirection(angle);
                 genericMovableUnit.setPosition(x - 32, y - 32);
-                setProductionDelay(50);
-                setProductionDelayLength(50);
+                setProductionDelay(unitData.getProductionDelay());
+                setProductionDelayLength(unitData.getProductionDelay());
                 gameModel.addUnit(this, genericMovableUnit);
             }
         }
-        else
-            setProductionDelay(getProductionDelay() - 1);
     }
 }

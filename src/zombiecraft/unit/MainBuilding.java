@@ -1,6 +1,7 @@
 package zombiecraft.unit;
 
 import zombiecraft.GameModel;
+import zombiecraft.Player;
 import zombiecraft.Unit;
 import zombiecraft.UnitData;
 
@@ -19,6 +20,9 @@ public abstract class MainBuilding extends Unit {
     @Override
     public void act(int time, GameModel gameModel)
     {
+        Player player = gameModel.getPlayerMap().get(this);
+        if (player.getProductionDelay()>0)
+            player.setProductionDelay(player.getProductionDelay()-1);
         for (Unit unit : gameModel.getUnits())
         {
             if (UnitData.isColliding(this,unit) && unit instanceof GenericMovableUnit)
