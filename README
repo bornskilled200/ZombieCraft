@@ -1,15 +1,15 @@
 Overmind
 	Trait
-		Can tell them to come back whenever
+		Can tell all units to retreat
 	Units
-		Zombie	    (Goes kind of straight, randomly adjust angle)
-		Hulking		(Goes straight, damages things that gets in its way)
+		Zombie	(Goes kind of straight, randomly adjust angle)
+		Crasher	(Goes straight, damages things that gets in its way)
 	Ideas
 
 
 Humans
 	Trait
-	    Can send a scout that moves fast and brings back units.
+	    Can send a scout that moves fast and brings a unit to retreat.
 	Units
 		Human       (Moves in a seesaw fashion)
 		Mercenary   (Travels circular motion away from the Base)
