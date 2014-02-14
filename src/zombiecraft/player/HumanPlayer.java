@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 import zombiecraft.*;
+import zombiecraft.human.Scout;
 import zombiecraft.unit.GenericMovableUnit;
 import zombiecraft.unit.MainBuilding;
 
@@ -17,12 +18,18 @@ import java.util.List;
 public class HumanPlayer extends Player {
 
 
+    private boolean abilityUsed;
+    private UnitData unitData;
+
     public HumanPlayer(Race race) {
         super(race);
+        unitData = new Scout();
     }
 
 
     public void poll(GameModel gameModel, ViewModel viewModel) {
+        if (getProductionDelay() <= 0)
+            abilityUsed = false;
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             gameModel.getMainBuildingMap().get(this).setHealth(0);
             return;
@@ -60,10 +67,11 @@ public class HumanPlayer extends Player {
         }
 
 
-        if (race == Race.ZOMBIE) {
-            if (Gdx.input.isKeyPressed(Input.Keys.Q) && getProductionDelay() <= 0) {
-                setProductionDelay(300);
-                setProductionDelayLength(300);
+        if (Gdx.input.isKeyPressed(Input.Keys.Q) && abilityUsed == false) {
+            if (race == Race.ZOMBIE) {
+                setProductionDelay(getProductionDelay() + 200);
+                setProductionDelayLength(getProductionDelayLength() + 200);
+                abilityUsed = true;
                 List<Unit> units = gameModel.getUnits();
                 viewModel.setUnprojectPosition(Gdx.input.getX(), Gdx.input.getY());
                 float x = mainBuilding.getX() + 32;
@@ -79,6 +87,20 @@ public class HumanPlayer extends Player {
                         genericMovableUnit.setDirection(angle);
                     }
                 }
+            } else if (race == Race.HUMAN) {
+                viewModel.setUnprojectPosition(Gdx.input.getX(), Gdx.input.getY());
+                GenericMovableUnit genericMovableUnit = new GenericMovableUnit(unitData);
+                abilityUsed = true;
+                float x = mainBuilding.getX() + 32;
+                float y = mainBuilding.getY() + 32;
+                float angle = (float) Math.atan2(viewModel.getUnprojectY() - y, viewModel.getUnprojectX() - x) * MathUtils.radiansToDegrees;
+                if (angle < 0)
+                    angle += 360;
+                genericMovableUnit.setDirection(angle);
+                genericMovableUnit.setPosition(x - 32, y - 32);
+                setProductionDelay(getProductionDelay() + 20);
+                setProductionDelayLength(getProductionDelayLength() + 20);
+                gameModel.addUnit(this, genericMovableUnit);
             }
         }
     }

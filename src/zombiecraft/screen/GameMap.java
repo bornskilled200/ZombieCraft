@@ -2,6 +2,7 @@ package zombiecraft.screen;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -39,9 +40,10 @@ public class GameMap implements Screen, GameModel, ViewModel
     public final Vector3 vector;
     private final SpriteBatch spriteBatch;
     private final BitmapFont bitmapFont;
-    private final boolean debug;
+    private boolean debug;
     private final int width;
     private final float height;
+    private final InputAdapter inputAdapter;
     public float accumulator;
     FPSLogger fpsLogger = new FPSLogger();
     private OrthographicCamera camera;
@@ -95,6 +97,19 @@ public class GameMap implements Screen, GameModel, ViewModel
         textures.put("Crasher", new Texture(Gdx.files.internal("assets/zombie/hulk.png")));
         Gdx.gl.glClearColor(1, 1, 1, 0);
         vector = new Vector3();
+        inputAdapter = new InputAdapter() {
+            @Override
+            public boolean keyTyped(char character) {
+                switch (character) {
+                    case ' ':
+                        GameMap.this.debug = !GameMap.this.debug;
+                        break;
+                    default:
+                        return false;
+                }
+                return true;
+            }
+        };
     }
 
     @Override
@@ -327,12 +342,13 @@ public class GameMap implements Screen, GameModel, ViewModel
 
         System.out.println(maxSize);
         texture = new Texture(2048, 2048, Pixmap.Format.RGBA8888);
+        Gdx.input.setInputProcessor(inputAdapter);
     }
 
     @Override
     public void hide()
     {
-
+        Gdx.input.setInputProcessor(null);
     }
 
     @Override

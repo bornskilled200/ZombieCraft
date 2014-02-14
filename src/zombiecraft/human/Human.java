@@ -20,13 +20,13 @@ public class Human extends SawtoothUnitData
 
     public Human()
     {
-        super(50, NAME, DESCRIPTION, 32, 200, 80, 20, 70);
+        super(50, NAME, DESCRIPTION, 20, 200, 80, 20, 70);
     }
 
     @Override
     public int getHurtRadius()
     {
-        return 48;  //To change body of implemented methods use File | Settings | File Templates.
+        return 36;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
