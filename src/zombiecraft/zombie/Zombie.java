@@ -20,7 +20,7 @@ public class Zombie extends UnitData
 
     public Zombie()
     {
-        super(75, NAME, "The remains of a deceased living being made autonomous", false, 20,20);
+        super(75, NAME, "The remains of a deceased living being made autonomous", false, 20, 25);
     }
 
     @Override

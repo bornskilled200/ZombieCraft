@@ -20,7 +20,7 @@ public class Human extends SawtoothUnitData
 
     public Human()
     {
-        super(75, NAME, DESCRIPTION, 32, 75, 80, 20, 70);
+        super(50, NAME, DESCRIPTION, 32, 200, 80, 20, 70);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class Human extends SawtoothUnitData
     {
         if (isAttackable(unit,target))
         {
-            return 1;
+            return 4;
         }
         return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }

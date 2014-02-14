@@ -21,7 +21,7 @@ public class Scout extends UnitData
 
     public Scout()
     {
-        super(25, NAME, "Straight path unit that brings back other units.", false, 32, 0);
+        super(25, NAME, "Straight path unit that brings back other units.", false, 32, 20);
     }
 
     @Override

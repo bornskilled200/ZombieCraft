@@ -19,7 +19,7 @@ public class Crasher extends UnitData
 
     protected Crasher()
     {
-        super(200, "Crasher", "Big mean thingamabob.", true, 22, 20);
+        super(200, "Crasher", "Big mean thingamabob.", true, 22, 125);
     }
 
     @Override

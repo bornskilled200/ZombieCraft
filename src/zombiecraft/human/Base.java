@@ -45,6 +45,6 @@ public class Base extends MainBuilding
     @Override
     public int getVisionRadius()
     {
-        return 96;  //To change body of implemented methods use File | Settings | File Templates.
+        return 128;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

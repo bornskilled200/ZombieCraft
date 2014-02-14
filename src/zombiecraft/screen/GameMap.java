@@ -40,6 +40,8 @@ public class GameMap implements Screen, GameModel, ViewModel
     private final SpriteBatch spriteBatch;
     private final BitmapFont bitmapFont;
     private final boolean debug;
+    private final int width;
+    private final float height;
     public float accumulator;
     FPSLogger fpsLogger = new FPSLogger();
     private OrthographicCamera camera;
@@ -69,10 +71,14 @@ public class GameMap implements Screen, GameModel, ViewModel
         mainBuildingMap = new HashMap<Player, MainBuilding>();
         camera = new OrthographicCamera();
 
+        width = 1280;
+        height = 1280 / (381 / 80.0f);
+        int i = (int) (Math.random() * 3) * 2 + 1;
         for (Player player : players)
         {
             MainBuilding mainBuilding = player.race.getMainBuilding();
-            mainBuilding.setPosition((float) Math.random() * (480 - 64), (float) Math.random() * (480 - 64));
+            mainBuilding.setPosition((width - 64) / 6 * i, (height - 64) / 2);
+            i = (i + (int) ((Math.random() * 2) + 1) * 2) % 6;
             mainBuildings.add(mainBuilding);
             units.add(mainBuilding);
             playerMap.put(mainBuilding, player);
@@ -180,7 +186,7 @@ public class GameMap implements Screen, GameModel, ViewModel
             fogOfWar.setColor(Color.CLEAR);
         else
             fogOfWar.setColor(Color.BLACK);
-        fogOfWar.fillRectangle(0, 0, (int) camera.viewportWidth, (int) camera.viewportHeight);
+        fogOfWar.fillRectangle(0, 0, width, (int) height);
         if (debug == false)
             fogOfWar.setColor(Color.CLEAR);
 
@@ -230,7 +236,7 @@ public class GameMap implements Screen, GameModel, ViewModel
             }
         }
         spriteBatch.enableBlending();
-        texture.draw(fogOfWar, 0, 2048 - (int) camera.viewportHeight);
+        texture.draw(fogOfWar, 0, (int) (2048 - height));
         spriteBatch.draw(texture, 0, 0);   //Comment this out to see the whole map
         spriteBatch.end();
 
@@ -303,12 +309,13 @@ public class GameMap implements Screen, GameModel, ViewModel
     @Override
     public void resize(int width, int height)
     {
-        camera.setToOrtho(false, width, height);
+        //float ratio = width / (float) height;
+        camera.setToOrtho(false, this.width, this.height);
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
         if (fogOfWar != null)
             fogOfWar.dispose();
-        fogOfWar = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        fogOfWar = new Pixmap(this.width, (int) this.height, Pixmap.Format.RGBA8888);
     }
 
     @Override

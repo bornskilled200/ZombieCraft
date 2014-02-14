@@ -38,8 +38,8 @@ public class Menu implements Screen
         this.spriteBatch = zombieCraft.getSpriteBatch();
         this.bitmapFont = zombieCraft.getBitmapFont();
         this.zombieCraft = zombieCraft;
-        computerRace = Race.HUMAN;
-        humanRace = Race.ZOMBIE;
+        computerRace = Race.ZOMBIE;
+        humanRace = Race.HUMAN;
         inputAdapter = new InputAdapter()
         {
             @Override

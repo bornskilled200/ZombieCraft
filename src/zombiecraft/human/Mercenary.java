@@ -34,7 +34,7 @@ public class Mercenary extends UnitData
     public float offsetDirection(int time, GenericMovableUnit unit)
     {
         return time < 80 ? 0 : (90+(time - 80) *
-                                .5f);  //To change body of implemented methods use File | Settings | File Templates.
+                .3f);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -46,7 +46,7 @@ public class Mercenary extends UnitData
     @Override
     public int getVisionRadius()
     {
-        return 48;  //To change body of implemented methods use File | Settings | File Templates.
+        return 64;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

@@ -31,6 +31,7 @@ public abstract class MainBuilding extends Unit {
                 if (genericMovableUnit.getStates().contains(GenericMovableUnit.State.RETREAT))
                 {
                     unit.setHealth(0);
+                    player.setProductionDelay(player.getProductionDelay() - genericMovableUnit.getUnitData().getProductionDelay());
                 }
             }
         }
