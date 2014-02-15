@@ -20,14 +20,14 @@ public class Mercenary extends UnitData
 
     protected Mercenary()
     {
-        super(25, NAME, "Pay me and I will get rid of your enemies. My services are not cheap.", false, 32,
+        super(25, NAME, "Pay me and I will get rid of your enemies. My services are not cheap.", false, 20,
               175);
     }
 
     @Override
     public int getHurtRadius()
     {
-        return 64;  //To change body of implemented methods use File | Settings | File Templates.
+        return 52;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
